@@ -1,4 +1,4 @@
-# Whisps
+# Wispy Lines
 
 Generate wispy lines using Perlin noise,
 flow field, and particle simulation.

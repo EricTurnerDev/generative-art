@@ -44,8 +44,8 @@
 (defn update-flow-field [noise-fn zoff]
   (let [cols (Math/floor (/ width scale))
         rows (Math/floor (/ height scale))]
-    (for [x (range rows)
-          y (range cols)]
+    (for [y (range rows)
+          x (range cols)]
       (let [xoff (* x xoff-step)
             yoff (* y yoff-step)
             noise (noise-fn xoff yoff zoff)
