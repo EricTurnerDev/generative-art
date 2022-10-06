@@ -28,14 +28,14 @@
                                     0))})
 
 (defn update-particles [particles flow-field]
-  (for [particle particles]
-    (let [pos (:pos particle)
-          cols (Math/floor (/ width scale))
-          x (Math/floor (/ (nth pos 0) scale))
-          y (Math/floor (/ (nth pos 1) scale))
-          idx (+ x (* y cols))
-          frc (nth flow-field idx)]
-      (p/update-particle particle frc width height))))
+  (vec (for [particle particles]
+         (let [pos (:pos particle)
+               cols (Math/floor (/ width scale))
+               x (Math/floor (/ (nth pos 0) scale))
+               y (Math/floor (/ (nth pos 1) scale))
+               idx (+ x (* y cols))
+               frc (nth flow-field idx)]
+           (p/update-particle particle frc width height)))))
 
 ;; TODO: Flow field calculations could be optimized. If the number of locations in
 ;; the flow field occupied by particles is fewer than the size of the flow field, then
@@ -45,13 +45,13 @@
 (defn update-flow-field [noise-fn zoff]
   (let [cols (Math/floor (/ width scale))
         rows (Math/floor (/ height scale))]
-    (for [y (range rows)
-          x (range cols)]
-      (let [xoff (* x xoff-step)
-            yoff (* y yoff-step)
-            noise (noise-fn xoff yoff zoff)
-            angle (* noise two-pi 4)]
-        (v/magnify (v/from-angle angle) vector-magnification)))))
+    (vec (for [y (range rows)
+               x (range cols)]
+           (let [xoff (* x xoff-step)
+                 yoff (* y yoff-step)
+                 noise (noise-fn xoff yoff zoff)
+                 angle (* noise two-pi 4)]
+             (v/magnify (v/from-angle angle) vector-magnification))))))
 
 (defn setup []
   (q/frame-rate frame-rate)
