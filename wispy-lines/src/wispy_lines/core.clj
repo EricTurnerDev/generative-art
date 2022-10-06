@@ -19,12 +19,13 @@
 (def ^:const frame-rate 60)
 
 (def initial-state {:zoff       0
-                    :color particle-color
+                    :color      particle-color
                     :flow-field []
                     :particles  (for [_ (range num-particles)]
-                                  (p/create-2d
+                                  (p/create-particle
                                     (q/random width)
-                                    (q/random height)))})
+                                    (q/random height)
+                                    0))})
 
 (defn update-particles [particles flow-field]
   (for [particle particles]
