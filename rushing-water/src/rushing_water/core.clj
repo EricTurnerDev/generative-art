@@ -79,28 +79,36 @@
      (doseq [[x y _] points]
        (q/point x y)))))
 
-(defn draw-border []
-  (q/stroke 255 255 255)
-  (q/stroke-weight 50)
+(defn draw-border [color]
+  (apply q/stroke color)
+  (q/stroke-weight 100)
   (q/line 0 0 image-width 0)
   (q/line image-width 0 image-width image-height)
   (q/line image-width image-height 0 image-height)
   (q/line 0 image-height 0 0))
 
 (defn draw-state [state]
-  (q/background 0 0 (q/random 0 128) (q/random 256))
-  ;(draw-flow-field (:flow-field state) (:resolution state))
+  (let [background-color [0 150 (q/random 200 256)]]
 
-  (dotimes [_ 10000]
-    (q/stroke-weight (q/random 1 15))
-    (q/stroke 0 (q/random 100 200) (q/random 200 256) (q/random 256))
-    (draw-curve (q/random 0 image-width) (q/random 0 image-height) (q/random 1000 15000) (:flow-field state)))
+    (apply q/background background-color)
 
-  (draw-border)
+    ;(draw-flow-field (:flow-field state) (:resolution state))
 
-  (q/save "rushing-water.tiff")
+    (dotimes [_ 10000]
+      (q/stroke-weight (q/random 1 15))
+      (q/stroke 0 (q/random 100 200) (q/random 200 256) (q/random 100))
+      (draw-curve (q/random 0 image-width) (q/random 0 image-height) (q/random 1000 15000) (:flow-field state)))
 
-  (q/no-loop)
+    (dotimes [_ 100]
+      (q/stroke-weight (q/random 1 5))
+      (q/stroke (q/random 256) (q/random 256) 0 (q/random 256))
+      (draw-curve (q/random 0 image-width) (q/random 0 image-height) (q/random 1000 15000) (:flow-field state)))
+
+    (draw-border [255 255 255])
+
+    (q/save "rushing-water.png")
+
+    (q/no-loop))
   )
 
 
