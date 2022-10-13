@@ -1,7 +1,9 @@
 (ns dotted-circles.core
   (:require [quil.core :as q]
             [quil.middleware :as m]
-            [dotted-circles.map-val :as mv]))
+            [dotted-circles.map-val :as mv])
+  (:import (java.text SimpleDateFormat)
+           (java.util Date)))
 
 (def ^:const image-width 1200)
 (def ^:const image-height 1200)
@@ -53,7 +55,7 @@
   ([author seed border-thickness]
             "Adds a signature to the bottom of the image"
             (q/fill 0 0 0)
-            (let [date (.format (java.text.SimpleDateFormat. "MM/dd/yyyy") (java.util.Date.))
+            (let [date (.format (SimpleDateFormat. "MM/dd/yyyy") (Date.))
                   text (format "%s, %s" author date)
                   x (- image-width border-thickness 132)
                   y (+ (- image-height border-thickness) 20)]
