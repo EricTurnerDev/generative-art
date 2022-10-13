@@ -6,8 +6,8 @@
 (def ^:const image-width 1200)
 (def ^:const image-height 1200)
 (def ^:const max-radius 500)
-(def ^:const num-dots 50000)
-(def ^:const max-dot-radius 20)
+(def ^:const num-dots 100000)
+(def ^:const max-dot-radius 10)
 (def ^:const color-palette [[222 236 251]
                             [190 218 247]
                             [122 179 239]
@@ -48,17 +48,19 @@
                        (/ (q/height) 2)]
                       (q/ellipse x y diameter diameter)))
 
-(defn sign [author seed border-thickness]
-  "Adds a signature to the bottom of the image"
-  (q/fill 0 0 0)
-  (let [date (.format (java.text.SimpleDateFormat. "MM/dd/yyyy") (java.util.Date.))
-        text (format "%s, %s" author date)
-        x (- image-width border-thickness 132)
-        y (+ (- image-height border-thickness) 20)]
-    (q/text text x y))
-  (let [x (- image-width border-thickness 132)
-        y (+ (- image-height border-thickness) 40)]
-    (q/text seed x y)))
+(defn sign
+  ([author seed] (sign author seed 75))
+  ([author seed border-thickness]
+            "Adds a signature to the bottom of the image"
+            (q/fill 0 0 0)
+            (let [date (.format (java.text.SimpleDateFormat. "MM/dd/yyyy") (java.util.Date.))
+                  text (format "%s, %s" author date)
+                  x (- image-width border-thickness 132)
+                  y (+ (- image-height border-thickness) 20)]
+              (q/text text x y))
+            (let [x (- image-width border-thickness 132)
+                  y (+ (- image-height border-thickness) 40)]
+              (q/text seed x y))))
 
 (defn draw-state [state]
   (doseq [_ (range num-dots)]
@@ -76,7 +78,7 @@
     (draw-dot x y dia color))
 
   (when sign?
-    (sign "Eric Turner" (format "%s" seed) 75))
+    (sign "Eric Turner" (format "%s" seed)))
 
   (q/save "dotted-circles.png")
 
