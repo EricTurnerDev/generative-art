@@ -47,7 +47,7 @@
   ;; Use push-matrix and pop-matrix to prevent transformations in the current generation from
   ;; affecting future generations.
   (q/push-matrix)
-  (dorun (map #((draw-rules %)) wrd))
+  (dorun (map #((draw-rules %)) wrd))                       ; dorun realizes the lazy sequence created by map
   (q/pop-matrix))
 
 (defn update-state [state]
