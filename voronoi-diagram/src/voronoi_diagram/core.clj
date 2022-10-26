@@ -3,7 +3,7 @@
 
 (declare voronoi-diagram)
 
-(def palette [0 30 60 90 120 150 180 210 240 270 300 330])
+(def palette (range 210 270))
 
 (defn setup []
   (q/frame-rate 30)
@@ -23,8 +23,8 @@
 
 (defn euclidean-distance
   "Calculates the Euclidean distance between two locations."
-  [a1 b1 a2 b2]
-  (Math/sqrt (+ (Math/pow (- a2 a1) 2) (Math/pow (- b2 b1) 2))))
+  [p1 p2 q1 q2]
+  (Math/sqrt (+ (Math/pow (- q1 p1) 2) (Math/pow (- q2 p2) 2))))
 
 (defn nearest-point
   "Finds the point closest to a location."
@@ -53,7 +53,7 @@
   (q/background 0 0 100)
   (let [points (create-points (count palette))]
     (draw-cells points)
-    (draw-points points))
+    #_(draw-points points))
   (q/no-loop))
 
 (defn mouse-pressed
@@ -69,7 +69,7 @@
 
 (q/defsketch voronoi-diagram
              :title "Voronoi Diagram"
-             :size [500 500]
+             :size [1000 1000]
              :setup setup
              :draw draw
              :mouse-pressed mouse-pressed
