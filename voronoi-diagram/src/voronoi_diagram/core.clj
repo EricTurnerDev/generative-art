@@ -1,13 +1,19 @@
 (ns voronoi-diagram.core
-  (:require [quil.core :as q]))
+  (:require [quil.core :as q])
+  (:import (java.text SimpleDateFormat)
+           (java.util Date)))
 
 (declare voronoi-diagram)
 
-(def palette (range 210 270))
+(def ^:const seed (rand-int (Integer/MAX_VALUE)))
+(def ^:const palette (range 210 270))
+(def ^:const white [0 0 100])
 
 (defn setup []
   (q/frame-rate 30)
-  (q/color-mode :hsb 360 100 100))
+  (q/color-mode :hsb 360 100 100)
+  (q/random-seed seed)
+  (q/text-font (q/create-font "DejaVu Sans" 11 true)))
 
 (defn create-point
   "Creates a point and assigns it the ith hue from the palette."
@@ -49,10 +55,38 @@
         (q/stroke hue 100 100)
         (q/point x y)))))
 
+(defn draw-border
+  ([] (draw-border white))
+  ([color] (draw-border color 75))
+  ([color thickness]
+   (apply q/stroke color)
+   (q/rect 0 0 (q/width) thickness)                        ; Top
+   (q/rect (- (q/width) thickness) 0 thickness (q/height)) ; Right
+   (q/rect 0 (- (q/height) thickness) (q/width) thickness) ; Bottom
+   (q/rect 0 0 thickness (q/height))                       ; Left
+   ))
+
+(defn sign
+  "Adds a signature to the bottom of the image."
+  ([author seed] (sign author seed 75))
+  ([author seed border-thickness]
+   (q/fill 0 0 0)
+   (let [date (.format (SimpleDateFormat. "MM/dd/yyyy") (Date.))
+         text (format "%s, %s" author date)
+         x (- (q/width) border-thickness 132)
+         y (+ (- (q/height) border-thickness) 20)]
+     (q/text text x y))
+   (let [x (- (q/width) border-thickness 132)
+         y (+ (- (q/height) border-thickness) 40)]
+     (q/text seed x y))))
+
 (defn draw []
   (q/background 0 0 100)
-  (let [points (create-points (count palette))]
+  (let [points (create-points (count palette))
+        border-thickness 50]
     (draw-cells points)
+    (draw-border white border-thickness)
+    (sign "Eric Turner" (str seed) border-thickness)
     #_(draw-points points))
   (q/no-loop))
 
@@ -64,8 +98,9 @@
 (defn key-pressed
   "Save the image to voronoi-diagram.png when the S key is pressed."
   []
-  (when (or (= (q/key-as-keyword) :s) (= (q/key-as-keyword) :S))
-    (q/save "voronoi-diagram.png")))
+  (let [key (q/key-as-keyword)]
+    (when (or (= key :s) (= key :S))
+      (q/save "voronoi-diagram.png"))))
 
 (q/defsketch voronoi-diagram
              :title "Voronoi Diagram"
