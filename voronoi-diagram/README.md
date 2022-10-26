@@ -2,4 +2,4 @@
 
 Visualize a Voronoi diagram
 
-![voronoi-diagram](https://user-images.githubusercontent.com/108039644/198107111-3bbb0fbe-ad8f-4d0e-910f-907f26216a5c.png)
+![voronoi-diagram](https://user-images.githubusercontent.com/108039644/198137494-0dd247f4-ba72-4629-b17b-9107000d3587.png)
