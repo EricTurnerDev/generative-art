@@ -3,7 +3,7 @@
 
 (def ^:const antiquewhite [34 14 98])
 
-(defn mouse-pressed [event]
+(defn mouse-pressed []
   (q/save "outputSave.png"))
 
 (defn setup []
